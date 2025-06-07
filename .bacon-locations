@@ -1,0 +1,2 @@
+warning /home/nicholas/Documents/Rust/hyprhook-mouse-move/src/main.rs:26:9 unused variable: `mouse_position`
+warning /home/nicholas/Documents/Rust/hyprhook-mouse-move/src/main.rs:8:5 fields `x` and `y` are never read
