@@ -1,2 +1,3 @@
-warning /home/nicholas/Documents/Rust/hyprhook-mouse-move/src/main.rs:26:9 unused variable: `mouse_position`
-warning /home/nicholas/Documents/Rust/hyprhook-mouse-move/src/main.rs:8:5 fields `x` and `y` are never read
+warning /home/nicholas/Documents/Rust/hyprhook-mouse-move/src/main.rs:48:12 this `else { if .. }` block can be collapsed
+warning /home/nicholas/Documents/Rust/hyprhook-mouse-move/src/main.rs:94:23 the following explicit lifetimes could be elided: 'a
+warning /home/nicholas/Documents/Rust/hyprhook-mouse-move/src/main.rs:95:11 called `.nth(0)` on a `std::iter::Iterator`, when `.next()` is equivalent
