@@ -39,6 +39,9 @@
 
         hyprhook-mouse-move = craneLib.buildPackage {
           src = craneLib.cleanCargoSource (craneLib.path ./.);
+
+          doCheck = true;
+          doNotSign = false;
         };
       in
       {
