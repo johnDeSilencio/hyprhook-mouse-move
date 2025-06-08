@@ -33,7 +33,9 @@
           overlays = [ (import rust-overlay) ];
         };
 
-        craneLib = crane.mkLib pkgs;
+        craneLib = (crane.mkLib pkgs).overrideToolchain (
+          p: p.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml
+        );
 
         hyprhook-mouse-move = craneLib.buildPackage {
           src = craneLib.cleanCargoSource (craneLib.path ./.);
