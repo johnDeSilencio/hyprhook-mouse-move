@@ -3,11 +3,16 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+    flake-utils.url = "github:numtide/flake-utils";
+
+    crane = {
+      url = "github:ipetkov/crane";
+    };
+
     rust-overlay = {
       url = "github:oxalica/rust-overlay";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-      };
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -15,27 +20,49 @@
     {
       self,
       nixpkgs,
+      crane,
+      flake-utils,
       rust-overlay,
+      ...
     }:
-    let
-      system = "x86_64-linux";
-      overlays = [ (import rust-overlay) ];
-      pkgs = import nixpkgs {
-        inherit system overlays;
-      };
-    in
-    with pkgs;
-    {
-      devShells.${system}.default = mkShell {
-        buildInputs = [
-          (pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml)
-          openssl
-          pkg-config
-          sqlite
-          nodejs_24
-          yarn
-          typescript
-        ];
-      };
-    };
+    flake-utils.lib.eachDefaultSystem (
+      system:
+      let
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [ (import rust-overlay) ];
+        };
+
+        craneLib = crane.mkLib pkgs;
+
+        hyprhook-mouse-move = craneLib.buildPackage {
+          src = craneLib.cleanCargoSource (craneLib.path ./.);
+        };
+      in
+      {
+        checks = {
+          inherit hyprhook-mouse-move;
+        };
+
+        packages.default = hyprhook-mouse-move;
+
+        devShells.default = craneLib.devShell {
+          # Inherit inputs from checks
+          checks = self.checks.${system};
+
+          packages = with pkgs; [
+            cargo-watch
+            cargo-audit
+            cargo-edit
+            clippy
+            openssl
+            pkg-config
+            sqlite
+            nodejs_24
+            yarn
+            typescript
+          ];
+        };
+      }
+    );
 }
