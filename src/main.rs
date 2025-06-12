@@ -8,7 +8,8 @@ use sysinfo::{ProcessRefreshKind, ProcessesToUpdate, System};
 static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
 
 const TRIGGER_FILE_PATH: &str = "/home/nicholas/.waybar_is_running";
-const MOUSE_POSITION_Y_LOWER_LIMIT: f64 = 80.0;
+const WAYBAR_INACTIVE_MOUSE_Y_POSITION_THRESHOLD: f64 = 20.0;
+const WAYBAR_ACTIVE_MOUSE_Y_POSITION_THRESHOLD: f64 = 80.0;
 
 #[derive(Debug, Deserialize)]
 struct MousePosition {
@@ -23,7 +24,7 @@ fn main() {
     let waybar_is_running = trigger_file_exists();
 
     if waybar_is_running {
-        if mouse_position.y >= MOUSE_POSITION_Y_LOWER_LIMIT {
+        if mouse_position.y >= WAYBAR_ACTIVE_MOUSE_Y_POSITION_THRESHOLD {
             // Specifically construct here to improve performance
             let mut sys = System::new();
             sys.refresh_processes_specifics(
@@ -46,7 +47,7 @@ fn main() {
             std::fs::remove_file(TRIGGER_FILE_PATH).expect("failed to remove trigger file");
         }
     } else {
-        if mouse_position.y <= MOUSE_POSITION_Y_LOWER_LIMIT {
+        if mouse_position.y <= WAYBAR_INACTIVE_MOUSE_Y_POSITION_THRESHOLD {
             // Waybar wasn't running before and the mouse has now moved to the top of the screen.
             // Start Waybar
             if let Ok(Fork::Child) = daemon(false, false) {
