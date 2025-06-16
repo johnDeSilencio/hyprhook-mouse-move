@@ -8,8 +8,8 @@ use sysinfo::{ProcessRefreshKind, ProcessesToUpdate, System};
 static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
 
 const TRIGGER_FILE_PATH: &str = "/home/nicholas/.waybar_is_running";
-const WAYBAR_INACTIVE_MOUSE_Y_POSITION_THRESHOLD: f64 = 20.0;
-const WAYBAR_ACTIVE_MOUSE_Y_POSITION_THRESHOLD: f64 = 80.0;
+const WAYBAR_INACTIVE_MOUSE_Y_POSITION_THRESHOLD: f64 = 10.0;
+const WAYBAR_ACTIVE_MOUSE_Y_POSITION_THRESHOLD: f64 = 100.0;
 
 #[derive(Debug, Deserialize)]
 struct MousePosition {
