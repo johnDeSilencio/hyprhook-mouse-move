@@ -2,3 +2,4 @@
 perf*
 flamegraph.svg
 .direnv/
+.bacon-locations
